@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>🌟 Diccionario Hebreo</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #a8edea, #fed6e3, #ffecd2);
+    background-size: 400% 400%;
+    animation: gradientMove 8s ease infinite;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+
+  @keyframes gradientMove {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  .stars {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+
+  .star {
+    position: absolute;
+    font-size: 22px;
+    animation: floatStar 6s ease-in-out infinite;
+    opacity: 0.5;
+  }
+
+  @keyframes floatStar {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50%       { transform: translateY(-18px) rotate(20deg); }
+  }
+
+  .container {
+    position: relative;
+    z-index: 1;
+    background: white;
+    border-radius: 30px;
+    padding: 35px 30px;
+    width: 100%;
+    max-width: 520px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.12);
+    border: 4px solid #ffd6e7;
+  }
+
+  .titulo {
+    font-family: 'Fredoka One', cursive;
+    font-size: 2rem;
+    text-align: center;
+    color: #ff6b9d;
+    margin-bottom: 6px;
+    text-shadow: 2px 2px 0px #ffe0ef;
+  }
+
+  label {
+    display: block;
+    font-weight: 900;
+    color: #6c3483;
+    margin-bottom: 6px;
+    font-size: 1rem;
+  }
+
+  input {
+    width: 100%;
+    padding: 14px 18px;
+    border: 3px solid #f8a5c2;
+    border-radius: 18px;
+    font-size: 1.2rem;
+    font-family: 'Nunito', sans-serif;
+    color: #444;
+    outline: none;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    margin-bottom: 20px;
+    background: #fff9fb;
+  }
+
+  input:focus {
+    border-color: #ff6b9d;
+    box-shadow: 0 0 0 4px rgba(255, 107, 157, 0.15);
+  }
+
+  button.buscar {
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, #ff6b9d, #ff8e53);
+    color: white;
+    border: none;
+    border-radius: 20px;
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.3rem;
+    cursor: pointer;
+    letter-spacing: 1px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 6px 20px rgba(255, 107, 157, 0.35);
+  }
+
+  button.buscar:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(255, 107, 157, 0.45);
+  }
+
+  button.buscar:active { transform: translateY(0); }
+
+  .resultado-box {
+    margin-top: 24px;
+    background: linear-gradient(135deg, #fef9c3, #fde8f5);
+    border: 3px dashed #ffd6e7;
+    border-radius: 22px;
+    padding: 22px;
+    display: none;
+    animation: aparecer 0.4s ease;
+  }
+
+  @keyframes aparecer {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .resultado-box.visible { display: block; }
+
+  .resultado-etiqueta {
+    font-size: 0.8rem;
+    font-weight: 900;
+    color: #cc5fa0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+
+  .hebreo-texto {
+    font-size: 3.2rem;
+    color: #6c3483;
+    direction: rtl;
+    text-align: center;
+    line-height: 1.3;
+    margin-bottom: 16px;
+    background: white;
+    border-radius: 14px;
+    padding: 16px;
+    letter-spacing: 3px;
+  }
+
+  .divisor {
+    border: none;
+    border-top: 2px dashed #f8a5c2;
+    margin: 14px 0;
+  }
+
+  .espanol-texto {
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.8rem;
+    color: #ff6b9d;
+    text-align: center;
+  }
+
+  .error-msg {
+    color: #e74c3c;
+    font-weight: 700;
+    font-size: 1rem;
+    text-align: center;
+  }
+
+  .sugerencias {
+    margin-top: 10px;
+    font-size: 0.85rem;
+    color: #9b59b6;
+    font-weight: 700;
+    text-align: center;
+  }
+
+  .sugerencias span {
+    cursor: pointer;
+    background: #f0e6fa;
+    border-radius: 10px;
+    padding: 3px 10px;
+    margin: 3px;
+    display: inline-block;
+    transition: background 0.2s;
+  }
+
+  .sugerencias span:hover { background: #d7bdf5; }
+
+  .footer {
+    margin-top: 24px;
+    text-align: center;
+    font-size: 0.75rem;
+    color: #bbb;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+
+  .footer span {
+    color: #e8b4d0;
+  }
+</style>
+</head>
+<body>
+
+<div class="stars">
+  <div class="star" style="top:8%;left:5%;animation-delay:0s">⭐</div>
+  <div class="star" style="top:15%;left:85%;animation-delay:1s">🌸</div>
+  <div class="star" style="top:75%;left:10%;animation-delay:2s">✨</div>
+  <div class="star" style="top:80%;left:88%;animation-delay:0.5s">🌟</div>
+  <div class="star" style="top:45%;left:92%;animation-delay:1.5s">💫</div>
+  <div class="star" style="top:60%;left:3%;animation-delay:2.5s">🌈</div>
+</div>
+
+<div class="container">
+  <div class="titulo">Diccionario Hebreo</div>
+
+  <label>Escribe la palabra en hebreo (en letras normales):</label>
+  <input id="texto" placeholder="Ejemplo: shalom, malka, ahava..." />
+
+  <button class="buscar" onclick="buscar()">¡Buscar!</button>
+
+  <div class="resultado-box" id="resultado-box">
+    <div class="resultado-etiqueta">🇮🇱 Escritura en hebreo:</div>
+    <div class="hebreo-texto" id="hebreo-texto"></div>
+    <hr class="divisor">
+    <div class="resultado-etiqueta">🇪🇸 Significado en español:</div>
+    <div class="espanol-texto" id="espanol-texto"></div>
+    <div class="sugerencias" id="sugerencias"></div>
+  </div>
+
+  <div class="footer">
+    v1.0.0 &nbsp;|&nbsp; © 2026 Todos los derechos reservados &nbsp;|&nbsp; <span>@einerb</span>
+  </div>
+</div>
+
+<script>
+const diccionario = [
+  { trans: ['shalom','shalon','salom'],            hebreo: 'שָׁלוֹם',     espanol: 'Paz / Hola / Adiós' },
+  { trans: ['toda','toda raba','todá'],             hebreo: 'תּוֹדָה',     espanol: 'Gracias' },
+  { trans: ['bevakasha','bevakacha','por favor'],   hebreo: 'בְּבַקָּשָׁה', espanol: 'Por favor / De nada' },
+  { trans: ['ken'],                                 hebreo: 'כֵּן',        espanol: 'Sí' },
+  { trans: ['lo'],                                  hebreo: 'לֹא',        espanol: 'No' },
+  { trans: ['boker tov','boker'],                   hebreo: 'בֹּקֶר טוֹב', espanol: 'Buenos días' },
+  { trans: ['layla tov','laila tov'],               hebreo: 'לַיְלָה טוֹב', espanol: 'Buenas noches' },
+  { trans: ['mishpacha','mishpaja','mishpajá'],     hebreo: 'מִשְׁפָּחָה',  espanol: 'Familia' },
+  { trans: ['abba','aba'],                          hebreo: 'אַבָּא',      espanol: 'Papá' },
+  { trans: ['ima','ema'],                           hebreo: 'אִמָּא',      espanol: 'Mamá' },
+  { trans: ['ben'],                                 hebreo: 'בֵּן',        espanol: 'Hijo' },
+  { trans: ['bat'],                                 hebreo: 'בַּת',        espanol: 'Hija' },
+  { trans: ['ach','aj'],                            hebreo: 'אָח',         espanol: 'Hermano' },
+  { trans: ['achot','ajot'],                        hebreo: 'אָחוֹת',      espanol: 'Hermana' },
+  { trans: ['saba','zayde'],                        hebreo: 'סַבָּא',      espanol: 'Abuelo' },
+  { trans: ['savta','safta','savtá'],               hebreo: 'סַבְתָּא',    espanol: 'Abuela' },
+  { trans: ['malka','malkah','malká','meleka'],     hebreo: 'מַלְכָּה',    espanol: 'Reina' },
+  { trans: ['melech','melek','mélej','melej'],      hebreo: 'מֶלֶךְ',     espanol: 'Rey' },
+  { trans: ['malchut','maljut'],                    hebreo: 'מַלְכוּת',    espanol: 'Reino' },
+  { trans: ['malach','malaj','malak'],              hebreo: 'מַלְאָךְ',    espanol: 'Ángel / Mensajero' },
+  { trans: ['shamayim','shamaim'],                  hebreo: 'שָׁמַיִם',    espanol: 'Cielo' },
+  { trans: ['aretz','eretz'],                       hebreo: 'אֶרֶץ',      espanol: 'Tierra / País' },
+  { trans: ['maim','mayim'],                        hebreo: 'מַיִם',       espanol: 'Agua' },
+  { trans: ['esh','eish'],                          hebreo: 'אֵשׁ',        espanol: 'Fuego' },
+  { trans: ['ruach'],                               hebreo: 'רוּחַ',       espanol: 'Viento / Espíritu' },
+  { trans: ['or'],                                  hebreo: 'אוֹר',        espanol: 'Luz' },
+  { trans: ['choshech','joshej'],                   hebreo: 'חֹשֶׁךְ',     espanol: 'Oscuridad' },
+  { trans: ['shemesh'],                             hebreo: 'שֶׁמֶשׁ',     espanol: 'Sol' },
+  { trans: ['yareaj','yareach'],                    hebreo: 'יָרֵחַ',      espanol: 'Luna' },
+  { trans: ['cochav','kochav','kojav'],             hebreo: 'כּוֹכָב',     espanol: 'Estrella' },
+  { trans: ['geshem'],                              hebreo: 'גֶּשֶׁם',     espanol: 'Lluvia' },
+  { trans: ['yam'],                                 hebreo: 'יָם',         espanol: 'Mar' },
+  { trans: ['nahar'],                               hebreo: 'נָהָר',       espanol: 'Río' },
+  { trans: ['har'],                                 hebreo: 'הַר',         espanol: 'Montaña' },
+  { trans: ['etz','ets'],                           hebreo: 'עֵץ',         espanol: 'Árbol' },
+  { trans: ['perach','peraj'],                      hebreo: 'פֶּרַח',      espanol: 'Flor' },
+  { trans: ['kelev'],                               hebreo: 'כֶּלֶב',      espanol: 'Perro' },
+  { trans: ['chatul','jatul'],                      hebreo: 'חָתוּל',      espanol: 'Gato' },
+  { trans: ['dag'],                                 hebreo: 'דָּג',        espanol: 'Pez' },
+  { trans: ['of'],                                  hebreo: 'עוֹף',        espanol: 'Pájaro / Ave' },
+  { trans: ['sus'],                                 hebreo: 'סוּס',        espanol: 'Caballo' },
+  { trans: ['arye','ari'],                          hebreo: 'אַרְיֵה',     espanol: 'León' },
+  { trans: ['dov'],                                 hebreo: 'דֹּב',        espanol: 'Oso' },
+  { trans: ['namer'],                               hebreo: 'נָמֵר',       espanol: 'Leopardo / Tigre' },
+  { trans: ['nesher'],                              hebreo: 'נֶשֶׁר',      espanol: 'Águila' },
+  { trans: ['nachash','najas'],                     hebreo: 'נָחָשׁ',      espanol: 'Serpiente' },
+  { trans: ['adom'],                                hebreo: 'אָדֹם',       espanol: 'Rojo' },
+  { trans: ['kachol','kajol'],                      hebreo: 'כָּחֹל',      espanol: 'Azul' },
+  { trans: ['yarok'],                               hebreo: 'יָרֹק',       espanol: 'Verde' },
+  { trans: ['tsahov','zahov','tsajov'],             hebreo: 'צָהֹב',       espanol: 'Amarillo' },
+  { trans: ['lavan'],                               hebreo: 'לָבָן',       espanol: 'Blanco' },
+  { trans: ['shachor','shahor'],                    hebreo: 'שָׁחֹר',      espanol: 'Negro' },
+  { trans: ['katom'],                               hebreo: 'כָּתֹם',      espanol: 'Naranja' },
+  { trans: ['varod'],                               hebreo: 'וָרֹד',       espanol: 'Rosado' },
+  { trans: ['sagol'],                               hebreo: 'סָגֹל',       espanol: 'Morado / Violeta' },
+  { trans: ['echad','ajad'],                        hebreo: 'אֶחָד',       espanol: 'Uno' },
+  { trans: ['shtayim','shtaim'],                    hebreo: 'שְׁתַּיִם',   espanol: 'Dos' },
+  { trans: ['shalosh'],                             hebreo: 'שָׁלוֹשׁ',    espanol: 'Tres' },
+  { trans: ['arba'],                                hebreo: 'אַרְבַּע',    espanol: 'Cuatro' },
+  { trans: ['chamesh','jamesh'],                    hebreo: 'חָמֵשׁ',      espanol: 'Cinco' },
+  { trans: ['shesh'],                               hebreo: 'שֵׁשׁ',       espanol: 'Seis' },
+  { trans: ['sheva'],                               hebreo: 'שֶׁבַע',      espanol: 'Siete' },
+  { trans: ['shmoneh','shmone'],                    hebreo: 'שְׁמֹנֶה',    espanol: 'Ocho' },
+  { trans: ['tesha'],                               hebreo: 'תֵּשַׁע',     espanol: 'Nueve' },
+  { trans: ['eser'],                                hebreo: 'עֶשֶׂר',      espanol: 'Diez' },
+  { trans: ['elohim'],                              hebreo: 'אֱלֹהִים',    espanol: 'Dios' },
+  { trans: ['adonai'],                              hebreo: 'אֲדֹנָי',     espanol: 'Señor (Dios)' },
+  { trans: ['torah','tora'],                        hebreo: 'תּוֹרָה',     espanol: 'Torá (La Ley)' },
+  { trans: ['shabbat','sabat','shabat'],            hebreo: 'שַׁבָּת',     espanol: 'Sábado / Shabat' },
+  { trans: ['bereshit'],                            hebreo: 'בְּרֵאשִׁית', espanol: 'En el principio (Génesis)' },
+  { trans: ['amen'],                                hebreo: 'אָמֵן',       espanol: 'Amén' },
+  { trans: ['halleluyah','aleluya','halelu'],       hebreo: 'הַלְלוּיָהּ', espanol: 'Aleluya (¡Alabad a Dios!)' },
+  { trans: ['emunah','emuná'],                      hebreo: 'אֱמוּנָה',    espanol: 'Fe / Creencia' },
+  { trans: ['tefila','tefilá'],                     hebreo: 'תְּפִלָּה',   espanol: 'Oración / Plegaria' },
+  { trans: ['beracha','beraja','bracha'],           hebreo: 'בְּרָכָה',    espanol: 'Bendición' },
+  { trans: ['chesed','jesed'],                      hebreo: 'חֶסֶד',       espanol: 'Bondad / Misericordia' },
+  { trans: ['rosh'],                                hebreo: 'רֹאשׁ',       espanol: 'Cabeza' },
+  { trans: ['yad'],                                 hebreo: 'יָד',         espanol: 'Mano' },
+  { trans: ['regel'],                               hebreo: 'רֶגֶל',       espanol: 'Pie / Pierna' },
+  { trans: ['ayin','ain'],                          hebreo: 'עַיִן',       espanol: 'Ojo' },
+  { trans: ['ozen'],                                hebreo: 'אֹזֶן',       espanol: 'Oído / Oreja' },
+  { trans: ['peh','pe'],                            hebreo: 'פֶּה',        espanol: 'Boca' },
+  { trans: ['lev'],                                 hebreo: 'לֵב',         espanol: 'Corazón' },
+  { trans: ['nefesh','nefes'],                      hebreo: 'נֶפֶשׁ',      espanol: 'Alma' },
+  { trans: ['bayit','bait'],                        hebreo: 'בַּיִת',      espanol: 'Casa' },
+  { trans: ['yom'],                                 hebreo: 'יוֹם',        espanol: 'Día' },
+  { trans: ['layla','laila'],                       hebreo: 'לַיְלָה',     espanol: 'Noche' },
+  { trans: ['lechem','lejem'],                      hebreo: 'לֶחֶם',       espanol: 'Pan' },
+  { trans: ['chalav','jalav'],                      hebreo: 'חָלָב',       espanol: 'Leche' },
+  { trans: ['ahava','ahaba'],                       hebreo: 'אַהֲבָה',     espanol: 'Amor' },
+  { trans: ['ner'],                                 hebreo: 'נֵר',         espanol: 'Vela' },
+  { trans: ['sefer'],                               hebreo: 'סֵפֶר',       espanol: 'Libro' },
+  { trans: ['koach','koaj'],                        hebreo: 'כֹּחַ',       espanol: 'Fuerza / Poder' },
+  { trans: ['emet'],                                hebreo: 'אֱמֶת',       espanol: 'Verdad' },
+  { trans: ['shir'],                                hebreo: 'שִׁיר',       espanol: 'Canción' },
+  { trans: ['tov'],                                 hebreo: 'טוֹב',        espanol: 'Bueno / Bien' },
+  { trans: ['ra'],                                  hebreo: 'רַע',         espanol: 'Malo' },
+  { trans: ['gadol'],                               hebreo: 'גָּדוֹל',     espanol: 'Grande' },
+  { trans: ['katan'],                               hebreo: 'קָטָן',       espanol: 'Pequeño' },
+  { trans: ['chazak','jazak'],                      hebreo: 'חָזָק',       espanol: 'Fuerte' },
+  { trans: ['yafe','yafa','yafeh'],                 hebreo: 'יָפֶה',       espanol: 'Hermoso / Bello' },
+  { trans: ['chadash','jadash'],                    hebreo: 'חָדָשׁ',      espanol: 'Nuevo' },
+  { trans: ['yashan'],                              hebreo: 'יָשָׁן',      espanol: 'Viejo / Antiguo' },
+  { trans: ['ahav','ahab'],                         hebreo: 'אָהַב',       espanol: 'Amar' },
+  { trans: ['halach','halaj'],                      hebreo: 'הָלַךְ',      espanol: 'Caminar / Ir' },
+  { trans: ['amar'],                                hebreo: 'אָמַר',       espanol: 'Decir / Hablar' },
+  { trans: ['shama','shamá'],                       hebreo: 'שָׁמַע',      espanol: 'Escuchar / Oír' },
+  { trans: ['yada','yadá'],                         hebreo: 'יָדַע',       espanol: 'Saber / Conocer' },
+  { trans: ['bara'],                                hebreo: 'בָּרָא',      espanol: 'Crear' },
+  { trans: ['natan'],                               hebreo: 'נָתַן',       espanol: 'Dar' },
+  { trans: ['shuv'],                                hebreo: 'שׁוּב',       espanol: 'Volver / Regresar' },
+  { trans: ['yerushalayim','jerusalem'],            hebreo: 'יְרוּשָׁלַיִם', espanol: 'Jerusalén' },
+  { trans: ['yisrael','israel'],                    hebreo: 'יִשְׂרָאֵל', espanol: 'Israel' },
+  { trans: ['sinai','sinaí'],                       hebreo: 'סִינַי',      espanol: 'Sinaí' },
+];
+
+function normalizar(texto) {
+  return texto.toLowerCase()
+    .normalize('NFD').replace(/[̀-ͯ]/g, '')
+    .trim();
+}
+
+async function buscar() {
+  const input = document.getElementById('texto').value.trim();
+  const box = document.getElementById('resultado-box');
+  const hebreoEl = document.getElementById('hebreo-texto');
+  const espanolEl = document.getElementById('espanol-texto');
+  const sugerEl = document.getElementById('sugerencias');
+
+  if (!input) {
+    box.classList.add('visible');
+    hebreoEl.innerHTML = '<span class="error-msg">¡Escribe una palabra primero!</span>';
+    espanolEl.textContent = '';
+    sugerEl.innerHTML = '';
+    return;
+  }
+
+  const query = normalizar(input);
+
+  let local = diccionario.find(e => e.trans.some(t => normalizar(t) === query));
+
+  if (!local) {
+    local = diccionario.find(e => e.trans.some(t => normalizar(t).startsWith(query)));
+  }
+
+  box.classList.add('visible');
+  sugerEl.innerHTML = '';
+
+  if (local) {
+    hebreoEl.textContent = local.hebreo;
+    espanolEl.textContent = local.espanol;
+    return;
+  }
+
+  hebreoEl.innerHTML = '<span style="color:#cc5fa0;font-size:1rem;animation:pulse 1s infinite">🔍 Buscando...</span>';
+  espanolEl.textContent = '';
+
+  try {
+    const r1 = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(input)}&langpair=en|iw`);
+    const d1 = await r1.json();
+    const hebreo = d1?.responseData?.translatedText;
+
+    if (!hebreo || hebreo === input) {
+      throw new Error('sin resultado hebreo');
+    }
+
+    const r2 = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(hebreo)}&langpair=iw|es`);
+    const d2 = await r2.json();
+    const significado = d2?.responseData?.translatedText;
+
+    hebreoEl.textContent = hebreo;
+    espanolEl.textContent = significado || '(sin traducción)';
+
+  } catch (e) {
+    hebreoEl.innerHTML = '<span class="error-msg">😕 No encontré esa palabra.</span>';
+    espanolEl.textContent = '';
+
+    const sugerencias = diccionario.filter(e =>
+      e.trans.some(t => normalizar(t).includes(query.slice(0, 3)))
+    ).slice(0, 4);
+
+    if (sugerencias.length > 0) {
+      sugerEl.innerHTML = '¿Quisiste decir? ' +
+        sugerencias.map(s => `<span onclick="usarSugerencia('${s.trans[0]}')">${s.trans[0]}</span>`).join('');
+    }
+  }
+}
+
+function usarSugerencia(palabra) {
+  document.getElementById('texto').value = palabra;
+  buscar();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('texto').addEventListener('keydown', e => {
+    if (e.key === 'Enter') buscar();
+  });
+});
+</script>
+
+</body>
+</html>
