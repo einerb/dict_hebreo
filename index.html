@@ -442,6 +442,8 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('texto').addEventListener('keydown', e => {
     if (e.key === 'Enter') buscar();
   });
+
+  fetch('/api/visit').catch(() => {});
 });
 </script>
 

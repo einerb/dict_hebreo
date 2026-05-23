@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Estadísticas — Diccionario Hebreo</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #a8edea, #fed6e3, #ffecd2);
+    background-size: 400% 400%;
+    animation: gradientMove 8s ease infinite;
+    padding: 30px 20px;
+    color: #444;
+  }
+
+  @keyframes gradientMove {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  h1 {
+    font-family: 'Fredoka One', cursive;
+    font-size: 2rem;
+    color: #ff6b9d;
+    text-align: center;
+    margin-bottom: 6px;
+    text-shadow: 2px 2px 0 #ffe0ef;
+  }
+
+  .subtitle {
+    text-align: center;
+    color: #9b59b6;
+    font-weight: 700;
+    font-size: 0.85rem;
+    margin-bottom: 30px;
+  }
+
+  .subtitle a {
+    color: #ff6b9d;
+    text-decoration: none;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .card {
+    background: white;
+    border-radius: 24px;
+    padding: 24px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.10);
+    border: 3px solid #ffd6e7;
+  }
+
+  .card-title {
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.1rem;
+    color: #cc5fa0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+  }
+
+  .total-num {
+    font-family: 'Fredoka One', cursive;
+    font-size: 4rem;
+    color: #6c3483;
+    text-align: center;
+    line-height: 1;
+  }
+
+  .total-label {
+    text-align: center;
+    font-weight: 700;
+    color: #bbb;
+    font-size: 0.85rem;
+    margin-top: 6px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+  }
+
+  th {
+    text-align: left;
+    font-weight: 900;
+    color: #9b59b6;
+    border-bottom: 2px dashed #ffd6e7;
+    padding: 6px 4px;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  td {
+    padding: 7px 4px;
+    border-bottom: 1px solid #fef0f7;
+    font-weight: 700;
+  }
+
+  td.num {
+    text-align: right;
+    color: #ff6b9d;
+    font-family: 'Fredoka One', cursive;
+    font-size: 1rem;
+  }
+
+  .bar-wrap {
+    background: #fef0f7;
+    border-radius: 20px;
+    height: 8px;
+    margin-top: 4px;
+    overflow: hidden;
+  }
+
+  .bar {
+    height: 100%;
+    border-radius: 20px;
+    background: linear-gradient(90deg, #ff6b9d, #ff8e53);
+  }
+
+  .loading {
+    text-align: center;
+    color: #cc5fa0;
+    font-weight: 700;
+    padding: 20px 0;
+  }
+
+  .error {
+    text-align: center;
+    color: #e74c3c;
+    font-weight: 700;
+    padding: 10px 0;
+    font-size: 0.9rem;
+  }
+
+  .footer {
+    text-align: center;
+    margin-top: 30px;
+    font-size: 0.75rem;
+    color: #bbb;
+    font-weight: 700;
+  }
+</style>
+</head>
+<body>
+
+<h1>Estadísticas</h1>
+<p class="subtitle"><a href="/">← Volver al diccionario</a></p>
+
+<div class="grid">
+
+  <div class="card">
+    <div class="card-title">Total de visitas</div>
+    <div class="total-num" id="total">—</div>
+    <div class="total-label">visitas registradas</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Por origen (referrer)</div>
+    <div id="referrers-wrap"><div class="loading">Cargando...</div></div>
+  </div>
+
+  <div class="card" style="grid-column: 1 / -1;">
+    <div class="card-title">Visitas por día</div>
+    <div id="daily-wrap"><div class="loading">Cargando...</div></div>
+  </div>
+
+</div>
+
+<div class="footer">v1.0.0 &nbsp;|&nbsp; Diccionario Hebreo &nbsp;|&nbsp; <span style="color:#e8b4d0">@einerb</span></div>
+
+<script>
+async function cargarStats() {
+  try {
+    const res = await fetch('/api/stats');
+    if (!res.ok) throw new Error('Error al cargar estadísticas');
+    const data = await res.json();
+
+    document.getElementById('total').textContent = data.total.toLocaleString('es');
+
+    const refEntries = Object.entries(data.referrers)
+      .sort((a, b) => b[1] - a[1]);
+
+    if (refEntries.length === 0) {
+      document.getElementById('referrers-wrap').innerHTML = '<p class="loading">Sin datos aún</p>';
+    } else {
+      const maxRef = refEntries[0][1];
+      document.getElementById('referrers-wrap').innerHTML = `
+        <table>
+          <thead><tr><th>Origen</th><th style="text-align:right">Visitas</th></tr></thead>
+          <tbody>
+            ${refEntries.map(([ref, count]) => `
+              <tr>
+                <td>
+                  ${ref}
+                  <div class="bar-wrap"><div class="bar" style="width:${Math.round(count/maxRef*100)}%"></div></div>
+                </td>
+                <td class="num">${count}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>`;
+    }
+
+    const dailyEntries = Object.entries(data.daily)
+      .sort((a, b) => b[0].localeCompare(a[0]))
+      .slice(0, 30);
+
+    if (dailyEntries.length === 0) {
+      document.getElementById('daily-wrap').innerHTML = '<p class="loading">Sin datos aún</p>';
+    } else {
+      const maxDay = Math.max(...dailyEntries.map(([, v]) => v));
+      document.getElementById('daily-wrap').innerHTML = `
+        <table>
+          <thead><tr><th>Fecha</th><th style="text-align:right">Visitas</th></tr></thead>
+          <tbody>
+            ${dailyEntries.map(([date, count]) => `
+              <tr>
+                <td>
+                  ${date}
+                  <div class="bar-wrap"><div class="bar" style="width:${Math.round(count/maxDay*100)}%"></div></div>
+                </td>
+                <td class="num">${count}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>`;
+    }
+
+  } catch (e) {
+    document.getElementById('total').textContent = '—';
+    document.getElementById('referrers-wrap').innerHTML = `<p class="error">${e.message}</p>`;
+    document.getElementById('daily-wrap').innerHTML = `<p class="error">${e.message}</p>`;
+  }
+}
+
+cargarStats();
+</script>
+
+</body>
+</html>
