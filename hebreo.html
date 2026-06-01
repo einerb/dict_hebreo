@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>🌟 Diccionario Hebreo</title>
+<title>✍️ Escribe en Hebreo</title>
 <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -52,47 +52,190 @@
     z-index: 1;
     background: white;
     border-radius: 30px;
-    padding: 35px 30px;
+    padding: 28px 22px;
     width: 100%;
-    max-width: 520px;
+    max-width: 580px;
     box-shadow: 0 10px 40px rgba(0,0,0,0.12);
     border: 4px solid #ffd6e7;
   }
 
+  .nav-link {
+    display: inline-block;
+    font-size: 0.82rem;
+    font-weight: 900;
+    color: #cc5fa0;
+    text-decoration: none;
+    margin-bottom: 14px;
+    background: #fef0f8;
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 2px solid #f8a5c2;
+    transition: background 0.2s;
+  }
+  .nav-link:hover { background: #fddcef; }
+
   .titulo {
     font-family: 'Fredoka One', cursive;
-    font-size: 2rem;
+    font-size: 1.9rem;
     text-align: center;
     color: #ff6b9d;
-    margin-bottom: 6px;
+    margin-bottom: 4px;
     text-shadow: 2px 2px 0px #ffe0ef;
   }
 
-  label {
-    display: block;
-    font-weight: 900;
-    color: #6c3483;
-    margin-bottom: 6px;
-    font-size: 1rem;
+  .subtitulo {
+    text-align: center;
+    font-size: 0.82rem;
+    color: #b07ac5;
+    margin-bottom: 16px;
+    font-weight: 700;
   }
 
-  input {
-    width: 100%;
-    padding: 14px 18px;
-    border: 3px solid #f8a5c2;
+  .display-hebreo {
+    min-height: 76px;
+    background: #fdf4ff;
+    border: 3px solid #e8c5f5;
     border-radius: 18px;
-    font-size: 1.2rem;
-    font-family: 'Nunito', sans-serif;
-    color: #444;
-    outline: none;
-    transition: border-color 0.3s, box-shadow 0.3s;
-    margin-bottom: 20px;
-    background: #fff9fb;
+    padding: 12px 18px;
+    font-size: 2.8rem;
+    direction: rtl;
+    text-align: center;
+    color: #6c3483;
+    letter-spacing: 4px;
+    margin-bottom: 14px;
+    font-family: serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    word-break: break-all;
+    transition: border-color 0.3s;
   }
 
-  input:focus {
-    border-color: #ff6b9d;
-    box-shadow: 0 0 0 4px rgba(255, 107, 157, 0.15);
+  .display-hebreo.activo { border-color: #b07af5; }
+
+  .placeholder-text {
+    color: #ccc;
+    font-size: 1rem;
+    font-family: 'Nunito', sans-serif;
+    letter-spacing: 0;
+    font-style: italic;
+  }
+
+  .seccion-label {
+    font-size: 0.75rem;
+    font-weight: 900;
+    color: #cc5fa0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 7px;
+  }
+
+  .teclado {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 5px;
+    margin-bottom: 7px;
+  }
+
+  .teclado-finales {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 5px;
+    margin-bottom: 12px;
+  }
+
+  .teclado-niqqud {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+    margin-bottom: 12px;
+  }
+
+  .btn-niqqud {
+    background: linear-gradient(135deg, #e3f2fd, #e8eaf6);
+    border-color: #90caf9;
+  }
+  .btn-niqqud .heb { color: #1a5296; font-size: 1.4rem; }
+  .btn-niqqud .nom { color: #3a78c2; }
+
+  .letra-btn {
+    background: linear-gradient(135deg, #f0e6fa, #fce4ec);
+    border: 2px solid #d9b8f5;
+    border-radius: 11px;
+    cursor: pointer;
+    padding: 7px 2px 4px;
+    transition: transform 0.12s, box-shadow 0.12s, background 0.12s;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1px;
+  }
+
+  .letra-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(180, 80, 200, 0.25);
+    background: linear-gradient(135deg, #e2d0f8, #fbd0e8);
+  }
+
+  .letra-btn:active { transform: scale(0.93); }
+
+  .letra-btn .heb {
+    font-size: 1.55rem;
+    color: #6c3483;
+    font-family: serif;
+    line-height: 1.1;
+  }
+
+  .letra-btn .nom {
+    font-size: 0.5rem;
+    color: #a570c8;
+    font-weight: 900;
+    line-height: 1.2;
+    text-align: center;
+  }
+
+  .btn-sofit {
+    background: linear-gradient(135deg, #e6dff8, #efe4fa);
+    border-color: #c5aaf0;
+  }
+  .btn-sofit .heb { color: #8b3daa; }
+
+  .acciones {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .btn-borrar {
+    flex: 1;
+    padding: 11px;
+    background: linear-gradient(135deg, #ffe0b2, #ffccbc);
+    border: 2px solid #ffab76;
+    border-radius: 14px;
+    font-family: 'Fredoka One', cursive;
+    font-size: 1rem;
+    color: #bf6020;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+
+  .btn-limpiar {
+    flex: 1;
+    padding: 11px;
+    background: linear-gradient(135deg, #fce4ec, #ffcdd2);
+    border: 2px solid #f48fb1;
+    border-radius: 14px;
+    font-family: 'Fredoka One', cursive;
+    font-size: 1rem;
+    color: #c0395c;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+
+  .btn-borrar:hover, .btn-limpiar:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 14px rgba(0,0,0,0.12);
   }
 
   button.buscar {
@@ -118,11 +261,11 @@
   button.buscar:active { transform: translateY(0); }
 
   .resultado-box {
-    margin-top: 24px;
+    margin-top: 22px;
     background: linear-gradient(135deg, #fef9c3, #fde8f5);
     border: 3px dashed #ffd6e7;
     border-radius: 22px;
-    padding: 22px;
+    padding: 20px;
     display: none;
     animation: aparecer 0.4s ease;
   }
@@ -143,23 +286,29 @@
     margin-bottom: 6px;
   }
 
-  .hebreo-texto {
-    font-size: 3.2rem;
+  .lectura-texto {
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.55rem;
     color: #6c3483;
-    direction: rtl;
     text-align: center;
-    line-height: 1.3;
-    margin-bottom: 16px;
     background: white;
     border-radius: 14px;
-    padding: 16px;
-    letter-spacing: 3px;
+    padding: 12px;
+    margin-bottom: 2px;
+  }
+
+  .lectura-nota {
+    font-size: 0.7rem;
+    color: #b07ac5;
+    text-align: center;
+    font-weight: 700;
+    margin-bottom: 12px;
   }
 
   .divisor {
     border: none;
     border-top: 2px dashed #f8a5c2;
-    margin: 14px 0;
+    margin: 12px 0;
   }
 
   .espanol-texto {
@@ -176,28 +325,8 @@
     text-align: center;
   }
 
-  .sugerencias {
-    margin-top: 10px;
-    font-size: 0.85rem;
-    color: #9b59b6;
-    font-weight: 700;
-    text-align: center;
-  }
-
-  .sugerencias span {
-    cursor: pointer;
-    background: #f0e6fa;
-    border-radius: 10px;
-    padding: 3px 10px;
-    margin: 3px;
-    display: inline-block;
-    transition: background 0.2s;
-  }
-
-  .sugerencias span:hover { background: #d7bdf5; }
-
   .footer {
-    margin-top: 24px;
+    margin-top: 22px;
     text-align: center;
     font-size: 0.75rem;
     color: #bbb;
@@ -205,9 +334,7 @@
     letter-spacing: 0.5px;
   }
 
-  .footer span {
-    color: #e8b4d0;
-  }
+  .footer span { color: #e8b4d0; }
 </style>
 </head>
 <body>
@@ -222,24 +349,39 @@
 </div>
 
 <div class="container">
-  <div style="text-align:right">
-    <a href="hebreo.html" style="display:inline-block;font-size:0.82rem;font-weight:900;color:#cc5fa0;text-decoration:none;margin-bottom:12px;background:#fef0f8;padding:6px 14px;border-radius:20px;border:2px solid #f8a5c2;transition:background 0.2s" onmouseover="this.style.background='#fddcef'" onmouseout="this.style.background='#fef0f8'">✍️ Escribe en Hebreo →</a>
+  <div><a href="index.html" class="nav-link">← Diccionario</a></div>
+
+  <div class="titulo">Escribe en Hebreo</div>
+  <div class="subtitulo">Toca las letras y descubre el significado</div>
+
+  <div class="display-hebreo" id="display">
+    <span id="chars"></span>
+    <span class="placeholder-text" id="placeholder">Toca las letras...</span>
   </div>
 
-  <div class="titulo">Diccionario Hebreo</div>
+  <div class="seccion-label">Alefato Hebreo</div>
+  <div class="teclado" id="teclado"></div>
 
-  <label>Escribe la palabra en hebreo (en letras normales):</label>
-  <input id="texto" placeholder="Ejemplo: shalom, malka, ahava..." />
+  <div class="seccion-label" style="margin-top:4px">Formas finales (al final de palabra)</div>
+  <div class="teclado-finales" id="teclado-finales"></div>
 
-  <button class="buscar" onclick="buscar()">¡Buscar!</button>
+  <div class="seccion-label" style="margin-top:4px">Puntos vocálicos (Niqqud) — se agregan después de la consonante</div>
+  <div class="teclado-niqqud" id="teclado-niqqud"></div>
+
+  <div class="acciones">
+    <button class="btn-borrar" onclick="borrar()">⌫ Borrar</button>
+    <button class="btn-limpiar" onclick="limpiar()">🗑️ Limpiar todo</button>
+  </div>
+
+  <button class="buscar" onclick="buscar()">¡Buscar significado!</button>
 
   <div class="resultado-box" id="resultado-box">
-    <div class="resultado-etiqueta">🇮🇱 Escritura en hebreo:</div>
-    <div class="hebreo-texto" id="hebreo-texto"></div>
+    <div class="resultado-etiqueta">🔊 Cómo se lee:</div>
+    <div class="lectura-texto" id="lectura-texto"></div>
+    <div class="lectura-nota" id="lectura-nota"></div>
     <hr class="divisor">
     <div class="resultado-etiqueta">🇪🇸 Significado en español:</div>
     <div class="espanol-texto" id="espanol-texto"></div>
-    <div class="sugerencias" id="sugerencias"></div>
   </div>
 
   <div class="footer">
@@ -248,6 +390,39 @@
 </div>
 
 <script>
+const letras = [
+  { heb: 'א', nom: 'Álef' },
+  { heb: 'ב', nom: 'Bet' },
+  { heb: 'ג', nom: 'Guímel' },
+  { heb: 'ד', nom: 'Dálet' },
+  { heb: 'ה', nom: 'He' },
+  { heb: 'ו', nom: 'Vav' },
+  { heb: 'ז', nom: 'Záyin' },
+  { heb: 'ח', nom: 'Jet' },
+  { heb: 'ט', nom: 'Tet' },
+  { heb: 'י', nom: 'Yod' },
+  { heb: 'כ', nom: 'Kaf' },
+  { heb: 'ל', nom: 'Lámed' },
+  { heb: 'מ', nom: 'Mem' },
+  { heb: 'נ', nom: 'Nun' },
+  { heb: 'ס', nom: 'Sámej' },
+  { heb: 'ע', nom: 'Áyin' },
+  { heb: 'פ', nom: 'Pe' },
+  { heb: 'צ', nom: 'Tsadí' },
+  { heb: 'ק', nom: 'Kuf' },
+  { heb: 'ר', nom: 'Resh' },
+  { heb: 'ש', nom: 'Shin' },
+  { heb: 'ת', nom: 'Tav' },
+];
+
+const letrasFinales = [
+  { heb: 'ך', nom: 'Kaf sofit' },
+  { heb: 'ם', nom: 'Mem sofit' },
+  { heb: 'ן', nom: 'Nun sofit' },
+  { heb: 'ף', nom: 'Pe sofit' },
+  { heb: 'ץ', nom: 'Tsadí sofit' },
+];
+
 const diccionario = [
   { trans: ['shalom','shalon','salom'],            hebreo: 'שָׁלוֹם',     espanol: 'Paz / Hola / Adiós' },
   { trans: ['toda','toda raba','todá'],             hebreo: 'תּוֹדָה',     espanol: 'Gracias' },
@@ -365,91 +540,150 @@ const diccionario = [
   { trans: ['sinai','sinaí'],                       hebreo: 'סִינַי',      espanol: 'Sinaí' },
 ];
 
-function normalizar(texto) {
-  return texto.toLowerCase()
-    .normalize('NFD').replace(/[̀-ͯ]/g, '')
-    .trim();
+function stripNiqqud(s) {
+  return s.replace(/[֑-ׇ]/g, '');
+}
+
+const mapaLetras = {
+  'א':"'", 'ב':'b', 'ג':'g', 'ד':'d', 'ה':'h', 'ו':'v',
+  'ז':'z', 'ח':'j', 'ט':'t', 'י':'y', 'כ':'k', 'ך':'k',
+  'ל':'l', 'מ':'m', 'ם':'m', 'נ':'n', 'ן':'n', 'ס':'s',
+  'ע':"'", 'פ':'p', 'ף':'f', 'צ':'ts', 'ץ':'ts',
+  'ק':'k', 'ר':'r', 'ש':'sh', 'ת':'t',
+};
+
+function transliterarConsonantes(s) {
+  return [...s].map(c => mapaLetras[c] || '').join('');
+}
+
+const tecladoEl = document.getElementById('teclado');
+letras.forEach(l => {
+  const btn = document.createElement('button');
+  btn.className = 'letra-btn';
+  btn.innerHTML = `<span class="heb">${l.heb}</span><span class="nom">${l.nom}</span>`;
+  btn.addEventListener('click', () => agregarLetra(l.heb));
+  tecladoEl.appendChild(btn);
+});
+
+const tecladoFinalesEl = document.getElementById('teclado-finales');
+letrasFinales.forEach(l => {
+  const btn = document.createElement('button');
+  btn.className = 'letra-btn btn-sofit';
+  btn.innerHTML = `<span class="heb">${l.heb}</span><span class="nom">${l.nom}</span>`;
+  btn.addEventListener('click', () => agregarLetra(l.heb));
+  tecladoFinalesEl.appendChild(btn);
+});
+
+const niqqud = [
+  { mark: 'ַ', ejemplo: 'מַ', nom: 'Pataj (a)' },
+  { mark: 'ָ', ejemplo: 'מָ', nom: 'Kamatz (a)' },
+  { mark: 'ֶ', ejemplo: 'מֶ', nom: 'Segol (e)' },
+  { mark: 'ֵ', ejemplo: 'מֵ', nom: 'Tsere (e)' },
+  { mark: 'ִ', ejemplo: 'מִ', nom: 'Hiriq (i)' },
+  { mark: 'ֹ', ejemplo: 'מֹ', nom: 'Holam (o)' },
+  { mark: 'ֻ', ejemplo: 'מֻ', nom: 'Kubuts (u)' },
+  { mark: 'ְ', ejemplo: 'מְ', nom: 'Shvá' },
+  { mark: 'ּ', ejemplo: 'בּ', nom: 'Dagesh' },
+  { mark: 'ׁ', ejemplo: 'שׁ', nom: 'Punto Shin' },
+  { mark: 'ׂ', ejemplo: 'שׂ', nom: 'Punto Sin' },
+  { mark: 'ֲ', ejemplo: 'אֲ', nom: 'H. Pataj' },
+  { mark: 'ֱ', ejemplo: 'אֱ', nom: 'H. Segol' },
+  { mark: 'ֳ', ejemplo: 'אֳ', nom: 'H. Kamatz' },
+];
+
+const tecladoNiqqudEl = document.getElementById('teclado-niqqud');
+niqqud.forEach(n => {
+  const btn = document.createElement('button');
+  btn.className = 'letra-btn btn-niqqud';
+  btn.innerHTML = `<span class="heb">${n.ejemplo}</span><span class="nom">${n.nom}</span>`;
+  btn.addEventListener('click', () => agregarLetra(n.mark));
+  tecladoNiqqudEl.appendChild(btn);
+});
+
+let texto = '';
+
+function agregarLetra(letra) {
+  texto += letra;
+  actualizar();
+}
+
+function borrar() {
+  if (texto.length > 0) {
+    texto = [...texto].slice(0, -1).join('');
+    actualizar();
+  }
+}
+
+function limpiar() {
+  texto = '';
+  actualizar();
+  document.getElementById('resultado-box').classList.remove('visible');
+}
+
+function actualizar() {
+  const charsEl = document.getElementById('chars');
+  const phEl = document.getElementById('placeholder');
+  const display = document.getElementById('display');
+  charsEl.textContent = texto;
+  if (texto) {
+    charsEl.style.display = '';
+    phEl.style.display = 'none';
+    display.classList.add('activo');
+  } else {
+    charsEl.style.display = 'none';
+    phEl.style.display = '';
+    display.classList.remove('activo');
+  }
 }
 
 async function buscar() {
-  const input = document.getElementById('texto').value.trim();
   const box = document.getElementById('resultado-box');
-  const hebreoEl = document.getElementById('hebreo-texto');
+  const lecturaEl = document.getElementById('lectura-texto');
+  const notaEl = document.getElementById('lectura-nota');
   const espanolEl = document.getElementById('espanol-texto');
-  const sugerEl = document.getElementById('sugerencias');
 
-  if (!input) {
+  if (!texto.trim()) {
     box.classList.add('visible');
-    hebreoEl.innerHTML = '<span class="error-msg">¡Escribe una palabra primero!</span>';
+    lecturaEl.innerHTML = '<span class="error-msg">¡Toca una letra primero!</span>';
+    notaEl.textContent = '';
     espanolEl.textContent = '';
-    sugerEl.innerHTML = '';
     return;
   }
 
-  const query = normalizar(input);
-
-  let local = diccionario.find(e => e.trans.some(t => normalizar(t) === query));
-
-  if (!local) {
-    local = diccionario.find(e => e.trans.some(t => normalizar(t).startsWith(query)));
-  }
-
   box.classList.add('visible');
-  sugerEl.innerHTML = '';
+  lecturaEl.innerHTML = '<span style="color:#cc5fa0;font-size:1rem;display:block;text-align:center">🔍 Buscando...</span>';
+  notaEl.textContent = '';
+  espanolEl.textContent = '';
+
+  const stripped = stripNiqqud(texto.trim());
+  const local = diccionario.find(e => stripNiqqud(e.hebreo) === stripped);
 
   if (local) {
-    hebreoEl.textContent = local.hebreo;
+    lecturaEl.textContent = local.trans[0];
+    notaEl.textContent = '';
     espanolEl.textContent = local.espanol;
     return;
   }
 
-  hebreoEl.innerHTML = '<span style="color:#cc5fa0;font-size:1rem;animation:pulse 1s infinite">🔍 Buscando...</span>';
-  espanolEl.textContent = '';
-
   try {
-    const r1 = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(input)}&langpair=en|iw`);
-    const d1 = await r1.json();
-    const hebreo = d1?.responseData?.translatedText;
+    const r = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(texto.trim())}&langpair=iw|es`);
+    const d = await r.json();
+    const espanol = d?.responseData?.translatedText;
 
-    if (!hebreo || hebreo === input) {
-      throw new Error('sin resultado hebreo');
-    }
+    if (!espanol || espanol === texto.trim()) throw new Error('sin resultado');
 
-    const r2 = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(hebreo)}&langpair=iw|es`);
-    const d2 = await r2.json();
-    const significado = d2?.responseData?.translatedText;
-
-    hebreoEl.textContent = hebreo;
-    espanolEl.textContent = significado || '(sin traducción)';
-
+    const consonantes = transliterarConsonantes(stripped);
+    lecturaEl.textContent = consonantes || '—';
+    notaEl.textContent = consonantes ? '(lectura aproximada, sin vocales)' : '';
+    espanolEl.textContent = espanol;
   } catch (e) {
-    hebreoEl.innerHTML = '<span class="error-msg">😕 No encontré esa palabra.</span>';
+    lecturaEl.innerHTML = '<span class="error-msg">😕 No encontré esa combinación.</span>';
+    notaEl.textContent = '';
     espanolEl.textContent = '';
-
-    const sugerencias = diccionario.filter(e =>
-      e.trans.some(t => normalizar(t).includes(query.slice(0, 3)))
-    ).slice(0, 4);
-
-    if (sugerencias.length > 0) {
-      sugerEl.innerHTML = '¿Quisiste decir? ' +
-        sugerencias.map(s => `<span onclick="usarSugerencia('${s.trans[0]}')">${s.trans[0]}</span>`).join('');
-    }
   }
 }
 
-function usarSugerencia(palabra) {
-  document.getElementById('texto').value = palabra;
-  buscar();
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('texto').addEventListener('keydown', e => {
-    if (e.key === 'Enter') buscar();
-  });
-
-  fetch('/api/visit').catch(() => {});
-});
+actualizar();
 </script>
-
 </body>
 </html>
